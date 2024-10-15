@@ -10,8 +10,8 @@ import (
 
 var editCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "Edit labels",
-	Long:  `Edit labels with the default editor.`,
+	Short: "Edit the configuration file",
+	Long:  "Edit the configuration file with the default editor.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		filename, err := getConfigFilename()
 		if err != nil {

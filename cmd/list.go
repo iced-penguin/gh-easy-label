@@ -16,8 +16,8 @@ type LabelSet struct {
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List defined labels",
-	Long:  `Output the list of defined labels to standard output.`,
+	Short: "List defined label sets",
+	Long:  "List defined label sets",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		labelSetsMap, err := getLabelSets()
 		if err != nil {

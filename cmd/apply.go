@@ -12,7 +12,7 @@ import (
 var applyCmd = &cobra.Command{
 	Use:   "apply [label_set]",
 	Short: "Applys label set",
-	Long:  "Deletes all existing labels and registers the labels from the given label set.",
+	Long:  "replaces all existing labels with the labels from the specified label set.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		labelSetName := args[0]
