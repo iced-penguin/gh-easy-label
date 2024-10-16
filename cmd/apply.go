@@ -9,11 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewApplyCmd() *cobra.Command {
+func newApplyCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apply [label_set]",
-		Short: "Applys label set",
-		Long:  "replaces all existing labels with the labels from the specified label set.",
+		Use:   "Apply [label_set]",
+		Short: "Apply label set",
+		Long:  "Replace all existing labels with the labels from the specified label set.",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			labelSetName := args[0]

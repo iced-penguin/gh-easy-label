@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewEditCmd() *cobra.Command {
+func newEditCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "edit",
 		Short: "Edit the configuration file",

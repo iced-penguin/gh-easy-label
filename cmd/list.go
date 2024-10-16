@@ -14,7 +14,7 @@ type LabelSet struct {
 	labels []Label
 }
 
-func NewListCmd() *cobra.Command {
+func newListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List defined label sets",
