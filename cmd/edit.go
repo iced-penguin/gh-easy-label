@@ -8,24 +8,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "Edit the configuration file",
-	Long:  "Edit the configuration file with the default editor.",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		filename, err := getConfigFilename()
-		if err != nil {
-			return err
-		}
-		editor, err := selectEditor()
-		if err != nil {
-			return err
-		}
-		if err := openEditor(editor, filename); err != nil {
-			return err
-		}
-		return nil
-	},
+func NewEditCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "edit",
+		Short: "Edit the configuration file",
+		Long:  "Edit the configuration file with the default editor.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			filename, err := getConfigFilename()
+			if err != nil {
+				return err
+			}
+			editor, err := selectEditor()
+			if err != nil {
+				return err
+			}
+			if err := openEditor(editor, filename); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	return cmd
 }
 
 func selectEditor() (string, error) {

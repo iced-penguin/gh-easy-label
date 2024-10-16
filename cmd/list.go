@@ -14,31 +14,34 @@ type LabelSet struct {
 	labels []Label
 }
 
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List defined label sets",
-	Long:  "List defined label sets",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		labelSetsMap, err := getLabelSets()
-		if err != nil {
-			return fmt.Errorf("failed to get label sets: %v", err)
-		}
-		if len(labelSetsMap) == 0 {
+func NewListCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list",
+		Short: "List defined label sets",
+		Long:  "List defined label sets",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			labelSetsMap, err := getLabelSets()
+			if err != nil {
+				return fmt.Errorf("failed to get label sets: %v", err)
+			}
+			if len(labelSetsMap) == 0 {
+				return nil
+			}
+
+			// NOTE: 表示順を固定するためにスライスにしてソート
+			labelSets := []LabelSet{}
+			for name, labels := range labelSetsMap {
+				labelSets = append(labelSets, LabelSet{name, labels})
+			}
+			sort.Slice(labelSets, func(i, j int) bool {
+				return labelSets[i].name < labelSets[j].name
+			})
+
+			printLabelSets(labelSets)
 			return nil
-		}
-
-		// NOTE: 表示順を固定するためにスライスにしてソート
-		labelSets := []LabelSet{}
-		for name, labels := range labelSetsMap {
-			labelSets = append(labelSets, LabelSet{name, labels})
-		}
-		sort.Slice(labelSets, func(i, j int) bool {
-			return labelSets[i].name < labelSets[j].name
-		})
-
-		printLabelSets(labelSets)
-		return nil
-	},
+		},
+	}
+	return cmd
 }
 
 func printLabelSets(labelSets []LabelSet) {

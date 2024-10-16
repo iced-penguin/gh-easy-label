@@ -9,43 +9,44 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var applyCmd = &cobra.Command{
-	Use:   "apply [label_set]",
-	Short: "Applys label set",
-	Long:  "replaces all existing labels with the labels from the specified label set.",
-	Args:  cobra.ExactArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		labelSetName := args[0]
-		labelSets, err := getLabelSets()
-		if err != nil {
-			return fmt.Errorf("failed to get label sets: %v", err)
-		}
-		labelSet, ok := labelSets[labelSetName]
-		if !ok {
-			return fmt.Errorf("not found label set: %s", labelSetName)
-		}
-
-		// TODO: YAMLにバリデーションをかける
-
-		// 既存のラベルを全て削除
-		existingLabelNames, err := fetchExistingLableNames()
-		if err != nil {
-			return fmt.Errorf("failed to fetch files: %v", err)
-		}
-		for _, labelName := range existingLabelNames {
-			if err := deleteLabel(labelName); err != nil {
-				return fmt.Errorf("failed to delete label: %v", err)
+func NewApplyCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "apply [label_set]",
+		Short: "Applys label set",
+		Long:  "replaces all existing labels with the labels from the specified label set.",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			labelSetName := args[0]
+			labelSets, err := getLabelSets()
+			if err != nil {
+				return fmt.Errorf("failed to get label sets: %v", err)
 			}
-		}
-		// ラベルをリポジトリに登録する
-		for _, label := range labelSet {
-			args := []string{"label", "create", label.Name, "-c", label.Color, "-d", label.Description, "-f"}
-			if _, err := execGH(args); err != nil {
-				return fmt.Errorf("failed to create label: %v", err)
+			labelSet, ok := labelSets[labelSetName]
+			if !ok {
+				return fmt.Errorf("not found label set: %s", labelSetName)
 			}
-		}
-		return nil
-	},
+
+			// 既存のラベルを全て削除
+			existingLabelNames, err := fetchExistingLableNames()
+			if err != nil {
+				return fmt.Errorf("failed to fetch files: %v", err)
+			}
+			for _, labelName := range existingLabelNames {
+				if err := deleteLabel(labelName); err != nil {
+					return fmt.Errorf("failed to delete label: %v", err)
+				}
+			}
+			// ラベルをリポジトリに登録する
+			for _, label := range labelSet {
+				args := []string{"label", "create", label.Name, "-c", label.Color, "-d", label.Description, "-f"}
+				if _, err := execGH(args); err != nil {
+					return fmt.Errorf("failed to create label: %v", err)
+				}
+			}
+			return nil
+		},
+	}
+	return cmd
 }
 
 func execGH(args []string) (bytes.Buffer, error) {

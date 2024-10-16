@@ -21,7 +21,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(editCmd)
-	rootCmd.AddCommand(listCmd)
-	rootCmd.AddCommand(applyCmd)
+	rootCmd.AddCommand(NewEditCmd())
+	rootCmd.AddCommand(NewListCmd())
+	rootCmd.AddCommand(NewApplyCmd())
 }
