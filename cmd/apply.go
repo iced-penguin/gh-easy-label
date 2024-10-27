@@ -11,7 +11,7 @@ import (
 
 func newApplyCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "Apply [label_set]",
+		Use:   "apply [label_set]",
 		Short: "Apply label set",
 		Long:  "Replace all existing labels with the labels from the specified label set.",
 		Args:  cobra.ExactArgs(1),
